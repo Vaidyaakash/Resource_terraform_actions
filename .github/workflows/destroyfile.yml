@@ -4,11 +4,6 @@ env:
   directory: "./main/practice"
 
 on:
-  push:
-    branches: ["main", "master"]
-  pull_request:
-    branches: ["main", "master"]
-
   workflow_dispatch:
 
 jobs:
@@ -21,6 +16,10 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
       AWS_DEFAULT_REGION: us-east-1
+
+    default:
+      run:
+        working-directory: ${{env.directory}}
 
     steps:
       - name: Checkout
@@ -43,5 +42,5 @@ jobs:
 
       - name: Terraform destroy
         id: destroy
-        run: terraform destroy -auto-approve
+        run: terraform destroy -auto-approve 
         working-directory: ${{env.directory}}
