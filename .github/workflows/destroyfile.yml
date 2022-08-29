@@ -1,15 +1,18 @@
-name: Creating resources for terraform
+name: trying to destroy
+
 env:
-  path_name: "./main/practice"
+  directory: "./main/practice"
+
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
+
   workflow_dispatch:
 
 jobs:
-  resource_job:
+  destroy_job:
 
     name: 'Terraform'
     runs-on: ubuntu-latest
@@ -25,35 +28,20 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-        
-      - name: Terraform Format
-        id: fmt
-        run: terraform fmt
-        working-directory: ${{env.path_name}}
 
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: ${{env.path_name}}
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-        working-directory: ${{env.path_name}}
+        working-directory: ${{env.directory}}
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'push'
         run: terraform plan -no-color
         continue-on-error: true
-        working-directory: ${{env.path_name}}
-
-      - name: Terraform Apply
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
-        working-directory: ${{env.path_name}}
+        working-directory: ${{env.directory}}
 
       - name: Terraform destroy
         id: destroy
         run: terraform destroy -auto-approve
-        working-directory: ${{env.path_name}}
+        working-directory: ${{env.directory}}
