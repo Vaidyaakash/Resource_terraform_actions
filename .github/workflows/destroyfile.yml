@@ -17,9 +17,9 @@ jobs:
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
       AWS_DEFAULT_REGION: us-east-1
 
-    default:
-      run:
-        working-directory: ${{env.directory}}
+    # default:
+    #   run:
+    #     working-directory: ${{env.directory}}
 
     steps:
       - name: Checkout
