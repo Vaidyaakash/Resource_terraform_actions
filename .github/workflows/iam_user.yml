@@ -29,21 +29,31 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt
-        working-directory: "./main/practice"
+        working-directory: ${{env.path_name}}
 
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: "./main/practice"
+        working-directory: ${{env.path_name}}
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        working-directory: "./main/practice"
+        working-directory: ${{env.path_name}}
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'push'
         run: terraform plan -no-color
         continue-on-error: true
-        working-directory: "./main/practice"
+        working-directory: ${{env.path_name}}
+
+      - name: Terraform Apply
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+        working-directory: ${{env.path_name}}
+
+      - name: Terraform destroy 
+        id: destroy
+        run: terraform destroy -auto-approve
+        working-directory: ${{env.path_name}}
